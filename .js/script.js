@@ -27,7 +27,7 @@ $(function () {
   TL.from('.sns-link li', { autoAlpha: 0, x: -50, stagger: 0.1 });
   TL.from('.copyright', { autoAlpha: 0 }, '<');
 
-  TL.from('.bruce-lee-bg', { autoAlpha: 0, scale: 0.9, duaration: 5, ease: 'none' }, 0);
+  TL.from('.bruce-lee-bg', { autoAlpha: 0, scale: 0.9, duration: 5, ease: 'none' }, 0);
   TL.from('.bruce-lee', { autoAlpha: 0, scale: 1.2, ease: 'power4.inOut' });
   TL.from('.title h2 strong', { x: -50, autoAlpha: 0, duration: 1 });
   TL.from(
@@ -50,12 +50,19 @@ $(function () {
       initMoving();
     },
   });
+  // TL.add('end');
+  TL.addLabel('end');
 
   // 작은 이소룡을 클릭하면 소리지르게
   const screamSound = $('.scream').get(0);
   console.log(screamSound);
 
   $('.small-bruce-lee').on('click', () => screamSound.play());
+  $('.logo').on('click', () => {
+    TL.seek('end');
+    $('.small-bruce-lee').addClass('action');
+    initMoving();
+  });
 
   // 부드러운 움직임 구현
   const $window = $(window);
@@ -67,7 +74,7 @@ $(function () {
   // 보정되는 마우스 좌표값
   let mx = 0;
   let my = 0;
-  let speed = 0.008;
+  let speed = 0.005;
 
   // 반복되는 동작(moving)을 변수에 저장 (취소시키려고)
   let movingObj;
