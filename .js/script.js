@@ -47,7 +47,7 @@ $(function () {
     ease: 'elastic.out(1,0.3)',
     onComplete: () => {
       $('.small-bruce-lee').addClass('action');
-      initMoving();
+      animate();
     },
   });
   // TL.add('end');
@@ -55,13 +55,13 @@ $(function () {
 
   // 작은 이소룡을 클릭하면 소리지르게
   const screamSound = $('.scream').get(0);
-  console.log(screamSound);
+  // console.log(screamSound);
 
   $('.small-bruce-lee').on('click', () => screamSound.play());
   $('.logo').on('click', () => {
     TL.seek('end');
     $('.small-bruce-lee').addClass('action');
-    initMoving();
+    animate();
   });
 
   // 부드러운 움직임 구현
@@ -74,46 +74,34 @@ $(function () {
   // 보정되는 마우스 좌표값
   let mx = 0;
   let my = 0;
-  let speed = 0.005;
+  let speed = 0.08;
 
-  // 반복되는 동작(moving)을 변수에 저장 (취소시키려고)
-  let movingObj;
-
-  // 함수를 3개 만들기
-  // 1. 마우스 좌표값 받아오는 함수
-  function getOffset() {
-    $window.on('mousemove', function (e) {
-      // 마우스 좌표의 시작지점을 화면의 정중앙으로 이동
-      x = e.pageX - $window.outerWidth() / 2;
-      y = e.pageY - $window.outerHeight() / 2;
-    });
-  }
-
-  // 2. 오브젝트를 움직이게 하는 함수
-  // 마우스의 기본 좌표값을 기준으로 어떤 값을 만들어 내자
-  function moving() {
+  function animate() {
     mx += (x - mx) * speed;
     my += (y - my) * speed;
 
-    // 오브젝트에 좌표값 적용
     $('.bruce-lee').css({
       transform: `translate(${mx}px, 0px)`,
     });
     $('.bruce-lee-bg').css({
-      transform: `translate(-${mx}px, 0px)`,
+      transform: `translate(${-mx}px, ${-my}px)`,
     });
     $('.title').css({
       transform: `translate(-${mx * 0.7}px, -50%)`,
     });
 
-    // 부드럽게 반복
-    movingObj = requestAnimationFrame(moving);
+    requestAnimationFrame(animate);
   }
 
-  // 3. 1번과 2번을 실행시키는 함수
-  // function initMoving () {} // 이름있는 함수
-  const initMoving = function () {
-    getOffset();
-    moving();
-  };
+  $(window).on('mousemove', function (e) {
+    // mx += (x - mx) * speed;
+    // my += (y - my) * speed;
+
+    // x = e.pageX - $window.innerWidth() / 2;
+    // y = e.pageY - $window.outerHeight() / 2;
+    x = Math.max(-100, Math.min(200, e.pageX - $window.innerWidth() / 2)); // Math.min(a, b) 둘 중에서 작은값 --> -960 ~ 200 -- Math.max(100, ddd) 둘 중에서 큰 값 --> 200 --- 최소 -100, 최대 200
+    y = Math.max(-10, Math.min(100, e.pageY - $window.outerHeight() / 2)); // 최소 0부터 최대 100까지
+
+    // console.log(x, y);
+  });
 });
